@@ -265,12 +265,14 @@ RUN cd / && git clone https://github.com/sctplab/usrsctp.git && cd /usrsctp && \
     ./configure && \
     make && make install
 
+COPY nginx.conf /usr/local/nginx/nginx.conf
 
-
-# tag v0.7.4 https://github.com/meetecho/janus-gateway/commit/5ff6907fc9cc6c64d8dc3342969abebad74cc964
-RUN cd / && git clone https://github.com/meetecho/janus-gateway.git && cd /janus-gateway && \
-    sh autogen.sh &&  \
-    git checkout origin/master && git reset --hard 5ff6907fc9cc6c64d8dc3342969abebad74cc964 && \ 
+# tag v0.4.5
+RUN cd / && git clone https://github.com/meetecho/janus-gateway.git 
+RUN cd /janus-gateway && sh autogen.sh
+RUN cd /janus-gateway && \
+    git checkout v0.4.5 && git reset --hard v0.4.5
+RUN cd /janus-gateway && \
     PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
     --enable-post-processing \
     --enable-boringssl \
@@ -290,7 +292,7 @@ RUN cd / && git clone https://github.com/meetecho/janus-gateway.git && cd /janus
     --enable-all-handlers && \
     make && make install && make configs && ldconfig
 
-COPY nginx.conf /usr/local/nginx/nginx.conf
+COPY ./plugin/libjanus_plugin_sfu.so /usr/local/lib/janus/plugins/
 
 CMD nginx && janus
 
