@@ -265,6 +265,7 @@ RUN cd / && git clone https://github.com/sctplab/usrsctp.git && cd /usrsctp && \
     ./configure && \
     make && make install
 
+# Copy conf
 COPY nginx.conf /usr/local/nginx/nginx.conf
 
 # tag v0.4.5
@@ -290,7 +291,13 @@ RUN cd /janus-gateway && \
     --enable-plugin-audiobridge \
     --enable-plugin-nosip \
     --enable-all-handlers && \
-    make && make install && make configs && ldconfig
+    make && make install && make configs
+    
+# Copy conf
+#conf in /usr/local/etc/janus/
+COPY conf/ /usr/local/etc/janus/
+
+RUN cd /janus-gateway && ldconfig
 
 COPY ./plugin/libjanus_plugin_sfu.so /usr/local/lib/janus/plugins/
 
