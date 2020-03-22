@@ -1,3 +1,21 @@
+#########
+#
+############
+FROM ubuntu:latest AS aptero-janus-plugin-sfu-builder
+
+RUN apt-get update
+RUN apt install -y git
+RUN apt install -y cargo
+RUN apt install -y libglib2.0-dev libjansson-dev
+RUN git clone https://github.com/mozilla/janus-plugin-sfu.git
+
+WORKDIR /janus-plugin-sfu/
+
+RUN cargo build --release
+
+######
+##
+#####
 FROM buildpack-deps:bionic
 
 #base install
@@ -150,6 +168,7 @@ COPY conf/ /usr/local/etc/janus/
 
 RUN cd /janus-gateway && ldconfig
 
-COPY ./plugin/libjanus_plugin_sfu.so /usr/local/lib/janus/plugins/
+#COPY ./plugin/libjanus_plugin_sfu.so /usr/local/lib/janus/plugins/
+COPY --from=aptero-janus-plugin-sfu-builder /janus-plugin-sfu/target/release/libjanus_plugin_sfu.so /usr/local/lib/janus/plugins/
 
 CMD nginx && janus
