@@ -132,11 +132,11 @@ RUN OPENRESTY="1.15.8.2" && ZLIB="zlib-1.2.11" && PCRE="pcre-8.41" &&  openresty
 # Copy conf
 COPY nginx.conf /usr/local/nginx/nginx.conf
 
-# tag v0.4.5
+# tag v0.9.2
 RUN cd / && git clone https://github.com/meetecho/janus-gateway.git 
 RUN cd /janus-gateway && sh autogen.sh
 RUN cd /janus-gateway && \
-    git checkout v0.9.0 && git reset --hard v0.9.0
+    git checkout v0.9.2 && git reset --hard v0.9.2
 RUN cd /janus-gateway && \
     PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
     --enable-data-channels \
