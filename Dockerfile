@@ -136,7 +136,7 @@ COPY nginx.conf /usr/local/nginx/nginx.conf
 RUN cd / && git clone https://github.com/meetecho/janus-gateway.git 
 RUN cd /janus-gateway && sh autogen.sh
 RUN cd /janus-gateway && \
-    git checkout v0.4.5 && git reset --hard v0.4.5
+    git checkout v0.9.0 && git reset --hard v0.9.0
 RUN cd /janus-gateway && \
     PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
     --enable-data-channels \
